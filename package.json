@@ -1,0 +1,23 @@
+{
+  "name": "drtrack-server",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Powiee/drtrack-server"
+  },
+  "author": "",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/Powiee/drtrack-server/issues"
+  },
+  "homepage": "https://github.com/Powiee/drtrack-server",
+  "dependencies": {
+    "body-parser": "^1.11.0",
+    "express": "^4.11.2"
+  }
+}
