@@ -8,7 +8,7 @@ module.exports.Router = function(Evacuee) {
       });
     })
     .post('/', function(req, res) {
-      Evacuee.find({ $or: [ {passport: req.body.passport}, {driverLic: req.body.driverLic}, {ssn: req.body.ssn} ]},
+      Evacuee.find({ $or: [ {passport: req.body.passport}, {driverLic: req.body.driverLic}, {ssn: req.body.ssn}, {code: req.body.code} ]},
       function(err, evacuee) {
         if (!evacuee.length) {
           var newEvacuee = new Evacuee({
@@ -33,9 +33,9 @@ module.exports.Router = function(Evacuee) {
             specialNeeds: req.body.specialNeeds
           });
           newEvacuee.save();
-          res.end("SUCCESS");
+          res.sendStatus(200).send();
         } else {
-          res.end("FAILURE");
+          res.sendStatus(400);
         }
       });
     })
