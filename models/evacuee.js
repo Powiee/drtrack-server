@@ -12,12 +12,13 @@ var mongoose = require('mongoose'),
       majorCategory: String,
       minorCategory: {
         pregnant: Boolean,
-        under18: Boolean
+        under: Boolean
       },
       militaryAfflicated: String,
       code: String,
       bloodType: String,
       weight: Number,
       specialNeeds: String
-    });
-    module.exports = mongoose.model('Evacuee', schema, 'evacuees');
+    }, { collection: 'evacuees' });
+
+module.exports = mongoose.model('Evacuee', schema, 'evacuees');

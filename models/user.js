@@ -5,5 +5,6 @@ var mongoose = require('mongoose'),
       role: {
         type: String
       }
-    });
-    module.exports = mongoose.model('User', schema, 'users');
+    }, { collection: 'users' });
+
+module.exports = mongoose.model('User', schema, 'users');
