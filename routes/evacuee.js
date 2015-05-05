@@ -43,5 +43,19 @@ module.exports.Router = function(Evacuee) {
       Evacuee.find({code: req.params.code}, function(err, evacuee) {
         res.json(evacuee);
       })
+    })
+    .post('/validate', function(req, res) {
+      var data = [];
+      if (req.body.passport) data.push({passport: req.body.passport});
+      if (req.body.driverLic) data.push({driverLic: req.body.driverLic});
+      if (req.body.ssn) data.push({ssn: req.body.ssn});
+      Evacuee.find({ $or: data},
+      function(err, evacuee) {
+        if(evacuee && evacuee.length > 0) {
+          res.json(evacuee);
+        } else {
+          res.sendStatus(400);
+        }
+      })
     });
 };
