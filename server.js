@@ -23,7 +23,7 @@ app.post('/api/login', function(req, res) {
     username: req.body.username,
     password: req.body.password
   }, function(err, user) {
-    if(user.length) {
+    if (user) {
       res.json(user);
     } else {
       res.sendStatus(400);
