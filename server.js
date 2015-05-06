@@ -6,6 +6,7 @@ var express = require('express'),
     User = require('./models/user'),
     Evacuee = require('./models/evacuee'),
     Manifest = require('./models/manifest'),
+    userRouter = require('./routes/user').Router(User),
     evacueeRouter = require('./routes/evacuee').Router(Evacuee),
     manifestRouter = require('./routes/manifest').Router(Manifest);
 
@@ -13,11 +14,7 @@ var allowCrossDomain = function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
   res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
-  if (req.method == 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  };
+  next();
 };
 
 app.use(bodyParser.json());
@@ -29,6 +26,7 @@ mongoose.connect('mongodb://localhost/drtrack');
 
 app.use('/api/evacuee', evacueeRouter);
 app.use('/api/manifest', manifestRouter);
+app.use('/api/user', userRouter);
 
 app.post('/api/login', function(req, res) {
   User.findOne({
