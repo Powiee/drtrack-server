@@ -3,14 +3,22 @@ var express = require('express');
 module.exports.Router = function(Evacuee) {
   return express.Router()
     .get('/', function(req, res) {
-      Evacuee.find({}, function(err, evacuee) {
-        res.json(evacuee);
+      Evacuee.find({}, function(err, data) {
+        res.json(data);
       });
     })
     .post('/', function(req, res) {
-      Evacuee.find({ $or: [ {passport: req.body.passport}, {driverLic: req.body.driverLic}, {ssn: req.body.ssn}, {code: req.body.code} ]},
-      function(err, evacuee) {
-        if (!evacuee.length) {
+      var fieldsObj = req.body;
+      var fields = [];
+      for(var attr in fieldsObj) {
+        if(fieldsObj[attr] && (attr == 'passport' || attr == 'driverLic' || attr == 'ssn' || attr == 'code')) {
+          var obj = {};
+          obj[attr] = fieldsObj[attr];
+          fields.push(obj);
+        }
+      }
+      Evacuee.find({ $or: fields }, function(err, data) {
+        if (!(data && data.length > 0)) {
           var newEvacuee = new Evacuee({
             firstName: req.body.firstName,
             middleName: req.body.middleName,
@@ -39,20 +47,49 @@ module.exports.Router = function(Evacuee) {
         }
       });
     })
+    .delete('/', function(req, res) {
+      console.log(req.body.code);
+      if(req.body.code) {
+        Evacuee.findOneAndRemove({code: req.body.code}, function(err, data) {
+          res.sendStatus(200);
+        });
+      } else {
+        res.sendStatus(400);
+      }
+    })
     .get('/:code', function(req, res) {
-      Evacuee.find({code: req.params.code}, function(err, evacuee) {
-        res.json(evacuee);
-      })
+      Evacuee.find({code: req.params.code}, function(err, data) {
+        res.json(data);
+      });
+    })
+    .post('/search', function(req, res) {
+      var fields = req.body;
+      for(var attr in fields) {
+        if(!fields[attr]) {
+          delete fields[attr];
+        }
+      }
+      Evacuee.find( fields, function(err, data) {
+        if(data && data.length > 0) {
+          res.json(data);
+        } else {
+          res.sendStatus(400);
+        }
+      });
     })
     .post('/validate', function(req, res) {
-      var data = [];
-      if (req.body.passport) data.push({passport: req.body.passport});
-      if (req.body.driverLic) data.push({driverLic: req.body.driverLic});
-      if (req.body.ssn) data.push({ssn: req.body.ssn});
-      Evacuee.find({ $or: data},
-      function(err, evacuee) {
-        if(evacuee && evacuee.length > 0) {
-          res.json(evacuee);
+      var fieldsObj = req.body;
+      var fields = [];
+      for(var attr in fieldsObj) {
+        if(fieldsObj[attr] && (attr == 'passport' || attr == 'driverLic' || attr == 'ssn')) {
+          var obj = {};
+          obj[attr] = fieldsObj[attr];
+          fields.push(obj);
+        }
+      }
+      Evacuee.find({ $or: fields }, function(err, data) {
+        if(data && data.length > 0) {
+          res.json(data);
         } else {
           res.sendStatus(400);
         }
