@@ -1,9 +1,14 @@
 var mongoose = require('mongoose'),
     schema = new mongoose.Schema({
       name: String,
-      type: String,
+      vehicleType: String,
+      vehicleDescription: String,
+      destination: String,
+      departureLocation: String,
+      departureDateTime: String,
+      flightNumber: String,
       capacity: Number,
-      space: Number
+      evacuee: [String]
     }, { collection: 'manifests' });
 
 module.exports = mongoose.model('Manifest', schema, 'manifests');

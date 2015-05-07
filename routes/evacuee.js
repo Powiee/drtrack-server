@@ -70,19 +70,29 @@ module.exports.Router = function(Evacuee) {
         weight: req.body.weight,
         specialNeeds: req.body.specialNeeds
       } , function(err, data) {
-        console.log(data);
-        res.sendStatus(200);
+        if(!err) {
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(400);
+        }
       });
     })
     .delete('/:id', function(req, res) {
       Evacuee.findByIdAndRemove(req.params.id, function(err, data) {
-        if(err) res.sendStatus(400);
-        res.sendStatus(200);
+        if(!err) {
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(400);
+        }
       });
     })
     .get('/:code', function(req, res) {
-      Evacuee.find({code: req.params.code}, function(err, data) {
-        res.json(data);
+      Evacuee.findOne({code: req.params.code}, function(err, data) {
+        if(!err) {
+          res.json(data);
+        } else {
+          res.sendStatus(400);
+        }
       });
     })
     .post('/search', function(req, res) {
