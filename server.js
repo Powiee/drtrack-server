@@ -1,4 +1,5 @@
-var express = require('express'),
+var config = require('./config'),
+    express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
@@ -22,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(allowCrossDomain);
 
-mongoose.connect('mongodb://localhost/drtrack');
+mongoose.connect(config.db.mongodb);
 
 app.use('/api/evacuee', evacueeRouter);
 app.use('/api/manifest', manifestRouter);
