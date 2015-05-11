@@ -4,11 +4,9 @@ module.exports.Router = function(User) {
   return express.Router()
     .post('/', function(req, res) {
       if (req.body.username && req.body.password) {
-        res.sendStatus(400);
-      } else {
         var data = [];
         if (req.body.username) data.push({ username: req.body.username });
-        User.find( data , function(err, user) {
+        User.find( data, function(err, user) {
           if (!(user && user.length > 0)) {
             var newUser = new User({
               username: req.body.username,
@@ -20,6 +18,8 @@ module.exports.Router = function(User) {
             res.sendStatus(400);
           }
         });
+      } else {
+        res.sendStatus(400);
       }
     });
 };

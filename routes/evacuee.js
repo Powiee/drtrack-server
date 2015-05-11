@@ -88,7 +88,7 @@ module.exports.Router = function(Evacuee) {
     })
     .get('/:code', function(req, res) {
       Evacuee.findOne({code: req.params.code}, function(err, data) {
-        if(!err) {
+        if(!err && data && data.length > 0) {
           res.json(data);
         } else {
           res.sendStatus(400);
